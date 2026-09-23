@@ -6,6 +6,7 @@
     "@expo/ui": "~57.0.19",
     "@firebase/firestore": "^4.17.2",
     "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-native/jest-preset": "^0.86.3",
     "expo": "~57.0.24",
     "expo-constants": "~57.0.19",
     "expo-device": "~57.0.2",
@@ -31,16 +32,24 @@
     "react-native-worklets": "0.10.1"
   },
   "devDependencies": {
+    "@testing-library/react-native": "^14.0.1",
+    "@types/jest": "^30.0.0",
     "@types/react": "~19.2.2",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
     "typescript": "~6.0.3"
   },
   "scripts": {
     "start": "expo start",
+    "test": "jest",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint"
+  },
+  "jest": {
+    "preset": "react-native"
   },
   "private": true
 }
