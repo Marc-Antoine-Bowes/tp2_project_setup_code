@@ -1,7 +1,7 @@
 //ATTENTION !!! Component copier coller de : https://jestjs.io/fr/docs/tutorial-react-native
 
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Button, Alert} from 'react-native';
 
 class Intro extends Component {
   render() {
