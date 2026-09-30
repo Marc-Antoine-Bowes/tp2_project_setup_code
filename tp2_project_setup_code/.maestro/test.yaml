@@ -1,0 +1,5 @@
+appId: http://localhost:8081
+---
+- launchApp:
+    clearState: true
+- assertVisible: 'Hello world'
