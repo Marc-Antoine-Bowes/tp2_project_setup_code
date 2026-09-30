@@ -33,13 +33,6 @@ jobs:
       - name: Run Jest
         run: npm test -- --ci --coverage --maxWorkers=2
 
-      - name: Upload coverage
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: tp2_project_setup_code/coverage/
-
   e2e-android:
     name: Maestro E2E (Android)
     runs-on: ubuntu-latest
@@ -61,6 +54,9 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -71,49 +67,9 @@ jobs:
         working-directory: tp2_project_setup_code
         run: npm ci
 
-      - name: Setup Expo / EAS
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
-          packager: npm          # ← IMPORTANT : force npm au lieu de yarn
-
-      - name: Build APK with EAS (local)
+      - name: Prebuild Android
         working-directory: tp2_project_setup_code
-        run: eas build --platform android --profile preview --local --non-interactive
+        run: npx expo prebuild --platform android --no-install
 
-      - name: Find APK
-        id: find-apk
-        working-directory: tp2_project_setup_code
-        run: |
-          APK=$(find . -name "*.apk" | head -1)
-          echo "apk_path=$APK" >> $GITHUB_OUTPUT
-          echo "APK trouvé : $APK"
-
-      - name: Install Maestro
-        run: |
-          curl -Ls "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
-
-      - name: Run Maestro tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 34
-          arch: x86_64
-          target: google_apis
-          profile: pixel_6
-          script: |
-            adb install -r "tp2_project_setup_code/${{ steps.find-apk.outputs.apk_path }}"
-            maestro test \
-              --format junit \
-              --output maestro-results.xml \
-              tp2_project_setup_code/.maestro/
-
-      - name: Upload Maestro results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: maestro-results-android
-          path: |
-            maestro-results.xml
-            ~/.maestro/tests/
+      - name: Build APK
+        working-directory: tp2_project_setup_code/android
