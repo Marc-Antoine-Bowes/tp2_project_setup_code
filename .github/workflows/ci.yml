@@ -63,6 +63,10 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Accept Android licenses
+        run: |
+          yes | sudo $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
       - name: Install dependencies
         working-directory: tp2_project_setup_code
         run: npm ci
@@ -73,3 +77,29 @@ jobs:
 
       - name: Build APK
         working-directory: tp2_project_setup_code/android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Install Maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+
+      - name: Run Maestro tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          profile: pixel_6
+          script: |
+            adb install -r tp2_project_setup_code/android/app/build/outputs/apk/debug/app-debug.apk
+            maestro test --format junit --output maestro-results.xml tp2_project_setup_code/.maestro/
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-results
+          path: |
+            maestro-results.xml
+            ~/.maestro/tests/
