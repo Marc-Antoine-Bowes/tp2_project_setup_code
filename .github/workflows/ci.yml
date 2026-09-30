@@ -90,10 +90,7 @@ jobs:
           profile: pixel_6
           script: |
             adb install -r tp2_project_setup_code/android/app/build/outputs/apk/debug/app-debug.apk
-            maestro test \
-              --format junit \
-              --output maestro-results.xml \
-              tp2_project_setup_code/.maestro/
+            maestro test --format junit --output maestro-results.xml tp2_project_setup_code/.maestro/
 
       - name: Upload results
         if: always()
