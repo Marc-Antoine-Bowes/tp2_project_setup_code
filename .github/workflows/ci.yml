@@ -40,7 +40,7 @@ jobs:
           name: coverage-report
           path: tp2_project_setup_code/coverage/
 
-e2e-android:
+  e2e-android:
     name: Maestro E2E (Android)
     runs-on: ubuntu-latest
     needs: unit-tests
