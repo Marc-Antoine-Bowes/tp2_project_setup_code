@@ -56,16 +56,14 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          accept-android-sdk-licenses: true
 
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-
-      - name: Accept Android licenses
-        run: |
-          yes | sudo $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: Install dependencies
         working-directory: tp2_project_setup_code
@@ -91,6 +89,7 @@ jobs:
           arch: x86_64
           target: google_apis
           profile: pixel_6
+          accept-android-sdk-licenses: true
           script: |
             adb install -r tp2_project_setup_code/android/app/build/outputs/apk/debug/app-debug.apk
             maestro test --format junit --output maestro-results.xml tp2_project_setup_code/.maestro/
