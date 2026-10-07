@@ -33,7 +33,7 @@ jobs:
       - name: Run Jest
         run: npm test -- --ci --coverage --maxWorkers=2
 
-  e2e-android:
+e2e-android:
     name: Maestro E2E (Android)
     runs-on: ubuntu-latest
     needs: unit-tests
@@ -53,11 +53,6 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          accept-android-sdk-licenses: true
 
       - name: Enable KVM
         run: |
