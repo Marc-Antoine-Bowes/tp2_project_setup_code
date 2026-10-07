@@ -27,7 +27,7 @@ export default function Index() {
         />
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={() => { register(email, pswd) }}>
+      <TouchableOpacity testID="signup-button" style={styles.button} onPress={() => { register(email, pswd) }}>
         <Text style={{ color: "white" }}>Créer un compte</Text>
       </TouchableOpacity>
     </View>

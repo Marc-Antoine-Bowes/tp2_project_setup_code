@@ -2,4 +2,10 @@ appId: com.padawanb.tp2_project_setup_code
 ---
 - launchApp:
     clearState: true
-- assertVisible: 'Hello world'
+
+- extendedWaitUntil:
+    visible: "Hello World"
+    timeout: 15000
+
+- assertVisible:
+    id: "signup-button"
