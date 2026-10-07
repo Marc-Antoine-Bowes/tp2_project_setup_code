@@ -25,7 +25,8 @@
       },
       "ios": {
         "bundleIdentifier": "com.setup.tp2"
-      }
+      },
+      "package": "com.padawanb.tp2_project_setup_code"
     },
     "web": {
       "output": "static",

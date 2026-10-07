@@ -1,4 +1,4 @@
-appId: http://localhost:8081
+appId: com.setuptp2
 ---
 - launchApp:
     clearState: true
