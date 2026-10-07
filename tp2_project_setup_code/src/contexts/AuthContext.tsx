@@ -2,6 +2,8 @@ import { auth } from "@/firebaseConfig";
 import { AuthContextType } from "@/types/contexts";
 import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
+import { db } from "@/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -22,7 +24,10 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
 
     const register = async (email: string, pswd: string): Promise<boolean | string> => {
         try {
-            await createUserWithEmailAndPassword(auth, email, pswd);
+            const userCreds = (await createUserWithEmailAndPassword(auth, email, pswd)).user;
+            await setDoc(doc(db, "users", userCreds.uid), {
+                email: email
+            })
             setIsAuthenticated(true);
             return true;
         } catch (error) {
