@@ -2,4 +2,4 @@ appId: com.padawanb.tp2_project_setup_code
 ---
 - launchApp:
     clearState: true
-- assertVisible: 'Créer un compte'
+- assertVisible: 'Hello world'

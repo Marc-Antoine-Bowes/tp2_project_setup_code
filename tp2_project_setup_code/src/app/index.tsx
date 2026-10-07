@@ -10,6 +10,7 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
+      <Text>Hello World</Text>
       <View>
         <Text>email</Text>
         <TextInput
