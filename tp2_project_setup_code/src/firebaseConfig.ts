@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore'
-import {getReactNativePersistence, initializeAuth } from "firebase/auth";
+import { connectAuthEmulator, getReactNativePersistence, initializeAuth } from "firebase/auth";
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -19,3 +19,11 @@ export const auth = initializeAuth(app, {
 });
 
 export const db = getFirestore(app);
+
+if (process.env.NODE_ENV === 'test') {
+  connectAuthEmulator(auth, 'http://127.0.0.1:9099', {
+    disableWarnings: true,
+  });
+
+  connectFirestoreEmulator(db, '127.0.0.1', 8080);
+}
