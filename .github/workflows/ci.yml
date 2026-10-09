@@ -96,3 +96,43 @@ jobs:
           path: |
             maestro-results.xml
             ~/.maestro/tests/
+
+  build-dev-apk:
+    name: Upload Dev APK Artifact
+    runs-on: ubuntu-latest
+    needs: e2e-android
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: tp2_project_setup_code/package-lock.json
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install dependencies
+        working-directory: tp2_project_setup_code
+        run: npm ci
+
+      - name: Prebuild Android
+        working-directory: tp2_project_setup_code
+        run: npx expo prebuild --platform android --no-install
+
+      - name: Build Debug APK
+        working-directory: tp2_project_setup_code/android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Mettre à disposition l'APK de dev
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-development-apk
+          path: tp2_project_setup_code/android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 7
