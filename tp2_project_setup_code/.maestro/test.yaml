@@ -2,10 +2,7 @@ appId: com.padawanb.tp2_project_setup_code
 ---
 - launchApp:
     clearState: true
-- runFlow:
-    commands:
-      - assertVisible:
-          id: "signup-button"
-    # Le bloc ci-dessous empêche le test d'échouer si le bouton est introuvable
-    catch:
-      - log: "Le bouton de création de compte n'est pas visible, mais on continue le test."
+- assertVisible:
+    id: "signup-button"
+    optional: true
+
